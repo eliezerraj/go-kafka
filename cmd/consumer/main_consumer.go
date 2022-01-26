@@ -39,12 +39,13 @@ func main(){
 		os.Exit(3)
 	}
 
-	log.Println("->config", config)
+	log.Println("-> Config", config)
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
 	
 	consumerService := adapter.NewConsumerService(config)
+	
 	go consumerService.Consumer(ctx)
 
 	ch := make(chan os.Signal, 1)

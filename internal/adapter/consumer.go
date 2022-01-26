@@ -14,6 +14,7 @@ import (
 )
 
 const consumer_timeout = 10
+var lag_consumer = 0
 
 type ConsumerService struct{
 	configurations	*core.Configurations
@@ -22,6 +23,8 @@ type ConsumerService struct{
 
 func NewConsumerService(configurations *core.Configurations) *ConsumerService {	
 	l := log.New(os.Stdout, "Consumer: ", 0)
+
+	lag_consumer = configurations.KafkaConfig.Lag
 
 	kafkaBrokerUrls := []string {configurations.KafkaConfig.Brokers1,
 								configurations.KafkaConfig.Brokers2,
@@ -72,15 +75,21 @@ func (c *ConsumerService) Consumer(ctx context.Context) {
 	for {
 		msg, err := r.ReadMessage(ctx)
 		if err != nil {
-			panic("could not read message " + err.Error())
+			// Comment below just for testing	
+			//panic("could not read message " + err.Error())
 		}
 
 		log.Println("----------------------------------------")
 		// log.Printf("Message Incoming Topic %s Partition %d Offset [%d]  %s MSG = %s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Key), string(msg.Value))
 		// log.Println("----------------------------------------")
 
+		if ( lag_consumer > 0){
+			log.Println("Waiting for %s", lag_consumer)
+			time.Sleep(time.Second * time.Duration(lag_consumer))
+		}
+
 		if err = r.CommitMessages(ctx, msg); err != nil {
-			log.Fatal("failed to commit messages:", err)
+			log.Println("failed to commit messages:", err)
 		}
 
 		log.Println("MESSAGE RECEIVED --> ", string(msg.Value))

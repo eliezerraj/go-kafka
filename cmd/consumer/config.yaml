@@ -9,3 +9,4 @@ kafkaConfig:
   topic: LOJA_NOVO_PEDIDO
   partition: 3
   replicationfactor: 3
+  lag: 10
