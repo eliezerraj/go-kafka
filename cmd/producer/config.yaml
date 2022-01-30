@@ -2,10 +2,10 @@ kafkaConfig:
   username: admin
   password: admin
   clientid: GO-CLIENT-MESSAGE
-  brokers1: 127.0.0.1:9091
-  brokers2: 127.0.0.1:9092
-  brokers3: 127.0.0.1:9093
+  brokers1: 127.0.0.1:9099
+  brokers2: 127.0.0.1:9099
+  brokers3: 127.0.0.1:9099
   topic: LOJA_NOVO_PEDIDO
   partition: 3
   requiredacks: 1 
-  replicationfactor: 3
+  replicationfactor: 1

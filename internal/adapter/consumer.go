@@ -34,9 +34,9 @@ func NewConsumerService(configurations *core.Configurations) *ConsumerService {
 									Username: configurations.KafkaConfig.Username,
 									Password: configurations.KafkaConfig.Password,
 								}
-								
+	log.Println(mechanism)							
 	dialer := &kafka.Dialer{	Timeout:  consumer_timeout * time.Second,
-								SASLMechanism: mechanism,
+					//			SASLMechanism: mechanism,
 							}
 
 	config := kafka.ReaderConfig{	Brokers:  kafkaBrokerUrls,

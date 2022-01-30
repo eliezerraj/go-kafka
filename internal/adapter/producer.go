@@ -41,9 +41,11 @@ func NewProducerService(configurations *core.Configurations) *ProducerService {
 	s1 := rand.NewSource(time.Now().UnixNano())
 	r1 := rand.New(s1)
 
+	log.Println(mechanism)
+
 	dialer := &kafka.Dialer{Timeout:  producer_timeout * time.Second,
 							ClientID: configurations.KafkaConfig.Clientid + "--" +strconv.Itoa(r1.Intn(100)),
-							SASLMechanism: mechanism,
+							//SASLMechanism: mechanism,
 						}
 
 	// Number of acknowledges from partition replicas required before receiving
