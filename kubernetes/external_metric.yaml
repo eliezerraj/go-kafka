@@ -1,0 +1,20 @@
+apiVersion: metrics.aws/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: metric-sqs-customer-length
+  namespace: test-b
+spec:
+  name: metric-sqs-customer-length
+  queries:
+    - id: metric_sqs_customer_length
+      metricStat:
+        metric:
+          namespace: "AWS/SQS"
+          metricName: "ApproximateNumberOfMessagesVisible"
+          dimensions:
+            - name: QueueName
+              value: "SQS-Customer"
+        period: 60
+        stat: Average
+        unit: Count
+      returnData: true

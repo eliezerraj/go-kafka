@@ -8,7 +8,7 @@ import (
 
 	"github.com/segmentio/kafka-go"
 	"github.com/segmentio/kafka-go/sasl/plain"
-
+	"github.com/segmentio/kafka-go/sasl/scram"
 	"github.com/go-kafka/internal/core"
 
 )
@@ -30,13 +30,21 @@ func NewConsumerService(configurations *core.Configurations) *ConsumerService {
 								configurations.KafkaConfig.Brokers2,
 								configurations.KafkaConfig.Brokers3,}
 
+	sramMech, err := scram.Mechanism(scram.SHA512, configurations.KafkaConfig.Username, configurations.KafkaConfig.Password)
+	if err != nil {
+					log.Printf("failed to SASL:", err)
+	}
+						
 	mechanism := plain.Mechanism{
 									Username: configurations.KafkaConfig.Username,
 									Password: configurations.KafkaConfig.Password,
 								}
-	log.Println(mechanism)							
+
+	log.Print(mechanism)
+	log.Print(sramMech)
+
 	dialer := &kafka.Dialer{	Timeout:  consumer_timeout * time.Second,
-					//			SASLMechanism: mechanism,
+						 //SASLMechanism: mechanism,//sramMech,
 							}
 
 	config := kafka.ReaderConfig{	Brokers:  kafkaBrokerUrls,

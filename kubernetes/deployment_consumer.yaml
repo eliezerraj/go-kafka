@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-msk-consumer
+  namespace: test-b
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: go-msk-consumer
+  template:
+    metadata:
+      labels:
+        app: go-msk-consumer
+        version: "go-msk-consumer"
+    spec:
+      containers:
+      - name: go-msk-consumer
+        image: 908671954593.dkr.ecr.us-east-2.amazonaws.com/go_kafka_consumer:latest
+        resources:
+           requests:
+             cpu: 50m
+             memory: 50Mi
+           limits:
+             cpu: 50m
+             memory: 50Mi
+        ports:
+        - containerPort: 9092
+      terminationGracePeriodSeconds: 60

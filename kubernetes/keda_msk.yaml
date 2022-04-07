@@ -1,0 +1,23 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: kafka-msk-scaledobject
+  namespace: test-b
+spec:
+  scaleTargetRef:
+    name: go-msk-consumer
+  pollingInterval: 10
+  minReplicaCount: 1  #Optional Default 0
+  maxReplicaCount: 2  #Optional Default 100
+  advanced:           # Optional. Section to specify advanced options
+    restoreToOriginalReplicaCount: true
+  triggers:
+  - type: kafka
+    metadata:
+      bootstrapServers: b-2.msk-cluster-vpc-east2.xsf10f.c3.kafka.us-east-2.amazonaws.com:9092,b-1.msk-cluster-vpc-east2.xsf10f.c3.kafka.us-east-2.amazonaws.com:9092
+      consumerGroup: GROUP-01
+      topic: LOJA_NOVO_PEDIDO_01
+      lagThreshold: "30" 
+      offsetResetPolicy: latest
+    #authenticationRef:
+    #  name: keda-trigger-auth-kafka-credential

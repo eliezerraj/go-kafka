@@ -1,0 +1,23 @@
+apiVersion: metrics.aws/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: metric-msk-topic-length
+spec:
+  name: metric-msk-topic-length
+  queries:
+    - id: metric-msk-topic-length
+      metricStat:
+        metric:
+          namespace: "AWS/Kafka"
+          metricName: "SumOffsetLag"
+          dimensions:
+            - name: "Consumer Group"
+              value: "GROUP-01"
+            - name: "Cluster Name"
+              value: "msk-cluster-vpc-east2"
+            - name: "Topic"
+              value: "LOJA_NOVO_PEDIDO_01"
+        period: 60
+        stat: Average
+        unit: Percent
+      returnData: true

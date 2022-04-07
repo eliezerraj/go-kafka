@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-msk-producer
+  namespace: test-b
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app: go-msk-producer
+  template:
+    metadata:
+      labels:
+        app: go-msk-producer
+        version: "go-msk-producer"
+    spec:
+      containers:
+      - name: go-msk-producer
+        image: 908671954593.dkr.ecr.us-east-2.amazonaws.com/go_kafka_producer:latest
+        resources:
+           requests:
+             cpu: 50m
+             memory: 50Mi
+           limits:
+             cpu: 50m
+             memory: 50Mi
+        ports:
+        - containerPort: 9092
+      terminationGracePeriodSeconds: 60

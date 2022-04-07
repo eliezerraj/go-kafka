@@ -1,7 +1,7 @@
 # docker network create --driver bridge go_hexa_net
-# docker build -t go_kafka_consumer_ip . -f dockerfile-consumer
-# docker run -dit --add-host="localhost:172.17.0.1" --name go_kafka_consumer -p 9091:9091 -p 9092:9092 -p 9093:9093 go_kafka_consumer
-# docker run --rm -i --add-host=host.docker.internal:host-gateway --name go_kafka_consumer -p 9091:9091 -p 9092:9092 -p 9093:9093 go_kafka_consumer_ip
+# docker build -t go_kafka_consumer . -f dockerfile-consumer
+# docker run -dit --add-host="localhost:172.17.0.1" --name go_kafka_consumer -p 9092:9092 -p 9094:9094 -p 9096:9096 go_kafka_consumer
+# docker run --rm -i --add-host=host.docker.internal:host-gateway --name go_kafka_consumer -p 9092:9092 -p 9094:9094 -p 9096:9096 go_kafka_consumer_ip
 
 FROM golang:1.17 As builder
 
@@ -15,4 +15,10 @@ RUN CGO_ENABLED=0 GOOS=linux go build -ldflags '-w' -o go_kafka_consumer
 #WORKDIR /app
 #COPY --from=builder /app/cmd/consumer/go_kafka_consumer .
 #COPY --from=builder /app/cmd/consumer/config.yaml .
-CMD ["/app/cmd/consumer/go_kafka_consumer"]
+#CMD ["/app/cmd/consumer/go_kafka_consumer"]
+
+FROM scratch
+WORKDIR /app
+COPY --from=builder /app/cmd/consumer/go_kafka_consumer .
+COPY --from=builder /app/cmd/consumer/config.yaml .
+CMD ["/app/go_kafka_consumer"]
