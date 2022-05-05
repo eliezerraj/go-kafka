@@ -81,25 +81,27 @@ func (c *ConsumerService) Consumer(ctx context.Context) {
 	r := c.reader
 
 	for {
-		msg, err := r.ReadMessage(ctx)
-		if err != nil {
-			// Comment below just for testing	
-			//panic("could not read message " + err.Error())
-		}
+			msg, err := r.ReadMessage(ctx)
+			if err != nil {
+					// Comment below just for testing
+					//panic("could not read message " + err.Error())
+					log.Println("Error Reading Kafka Stream : ",err)
+			}
 
-		log.Println("----------------------------------------")
-		// log.Printf("Message Incoming Topic %s Partition %d Offset [%d]  %s MSG = %s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Key), string(msg.Value))
-		// log.Println("----------------------------------------")
+			log.Println("----------------------------------------")
+			// log.Printf("Message Incoming Topic %s Partition %d Offset [%d]  %s MSG = %s\n", msg.Topic, msg.Partition, msg.Offset, string(msg.Key), string(msg.Value))
+			// log.Println("----------------------------------------")
 
-		if ( lag_consumer > 0){
-			log.Println("Waiting for %s", lag_consumer)
-			time.Sleep(time.Second * time.Duration(lag_consumer))
-		}
+			if ( lag_consumer > 0){
+					//log.Println("Waiting for %s", lag_consumer)
+					time.Sleep(time.Second * time.Duration(lag_consumer))
+			}
 
-		if err = r.CommitMessages(ctx, msg); err != nil {
-			log.Println("failed to commit messages:", err)
-		}
+			if err = r.CommitMessages(ctx, msg); err != nil {
+					log.Println("failed to commit messages:", err)
+			}
 
-		log.Println("MESSAGE RECEIVED --> ", string(msg.Value))
+			log.Printf("***** Key: %s  | Message: %s ****\n ",  string(msg.Key) ,string(msg.Value))
 	}
 }
+
